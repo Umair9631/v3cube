@@ -26,6 +26,7 @@ db/*.sqlite3
 /config/master.key
 /config/secrets.yml
 /db/schema.rb
+Gemfile.lock
 
 # various artifacts
 **.war
