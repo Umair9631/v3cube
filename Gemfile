@@ -29,7 +29,7 @@ gem 'devise'
 gem 'high_voltage'
 gem 'jquery-rails'
 gem 'pg'
-gem 'therubyracer', :platform=>:ruby
+gem 'mini_racer', :platform=>:ruby
 group :development do
   gem 'better_errors'
   gem 'hub', :require=>nil
