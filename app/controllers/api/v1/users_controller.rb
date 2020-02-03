@@ -1,5 +1,6 @@
 class Api::V1::UsersController < Api::V1::ApiController
-  skip_before_action :authenticate_via_token, only: [:signin, :signup]
+  include Api::V1::UsersHelper
+  skip_before_action :authenticate_via_token, only: [:signin, :signup, :forgotpassword]
 
   #####################################################################
   ## Function:    signin
@@ -22,25 +23,15 @@ class Api::V1::UsersController < Api::V1::ApiController
     return render json: { success: false, msg: 'Invalid email / password.' }, status: 200 unless @user
 
     # Check if user is active
-    return render json: { success: false, msg: "Sorry! Can't allow you to log in for the moment." }, status: 200 unless @user.is_active
 
     ## User found, check password and proceed
     if @user.valid_password?(password)
-      token = @user.get_jwt_token()
+      token = get_jwt_token(@user)
 
       ## Update user with token
       @user.update_attribute(:jwt_token, token)
 
-      return render json: { success: true, msg: 'User assigned authentication token.', data: {
-                token:        token,
-                id:           @user.id,
-                name:         @user.profile.full_name,
-                about:        @user.profile.about,
-                role:         @user.role,
-                is_active:    @user.is_active,
-                avatar:       @user.profile.avatar,
-                has_avatar:   @user.has_avatar?
-              } }, status: 200
+      return render json: { success: true, msg: 'User assigned authentication token.', data: {user: @user}} , status: 200
     else
       return render json: { success: false, msg: 'Invalid email / password.' }, status: 200
     end
@@ -53,22 +44,22 @@ class Api::V1::UsersController < Api::V1::ApiController
   #####################################################################
   def signup
     email           = params[:user][:email]
-    password        = Devise.friendly_token.first(8)
+    password        = params[:user][:password]
+    role            = params[:user][:role]
     @user           = User.new(email: email, password: password)
-    @user.is_active = false
 
     if email.blank?
       return render json: { success: false, msg: 'Email address is required.' }, status: 200
     end
 
     if @user.save
-      @user.add_role :teacher
-
-      @user.create_profile(profile_params)
-
-      ## Notify admin
+      if role == 1
+        @user.add_role :service_user
+      else
+        @user.add_role :service_provider
+      end
+      @user.update_attributes(profile_params)
       UserMailer.new_signup(@user).deliver_now
-      UserMailer.new_teacher_notify(@user).deliver_now
 
       return render json: {success: true, msg: 'User created successfully.', data: { id: @user.id, email: email}}, status: 200
     else
@@ -168,6 +159,6 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   private
     def profile_params
-      params.fetch(:user, {}).permit(:full_name, :organization, :phone)
+      params.fetch(:user, {}).permit(:first_name, :last_name, :email, :password, :profile_url, :country, :mobile, :location, :language, :currency, :role)
     end
 end

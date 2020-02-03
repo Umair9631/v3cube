@@ -50,13 +50,12 @@ Rails.application.configure do
   config.assets.debug = true
 
   config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",
-    port: 587,
-    domain: Rails.application.secrets.domain_name,
-    authentication: "plain",
-    enable_starttls_auto: true,
-    user_name: Rails.application.secrets.email_provider_username,
-    password: Rails.application.secrets.email_provider_password
+    :user_name => '1666f6dbf9c385',
+  :password => 'de45d2ca3928b5',
+  :address => 'smtp.mailtrap.io',
+  :domain => 'smtp.mailtrap.io',
+  :port => '2525',
+  :authentication => 'plain'
   }
   # ActionMailer Config
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }

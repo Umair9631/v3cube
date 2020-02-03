@@ -1,13 +1,17 @@
 class User < ApplicationRecord
-  enum role: [:user, :vip, :admin]
-  after_initialize :set_default_role, :if => :new_record?
+  rolify
 
-  def set_default_role
-    self.role ||= :user
-  end
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable, :confirmable,
+  devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+   def update_logout_details
+    self.update_attributes(
+      last_login: Time.now,
+      jwt_token: nil,
+    )
+  end
+
 end

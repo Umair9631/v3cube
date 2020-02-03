@@ -5,5 +5,15 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-user = CreateAdminService.new.call
-puts 'CREATED ADMIN USER: ' << user.email
+Role.delete_all
+
+['super_admin', 'admin', 'service_user', 'service_provider'].each do |role_name|
+  Role.create! name: role_name
+end
+puts "Roles created successfully."
+
+
+admin = User.create(name: "Muhammad Umair", email: "superadmin@v3cube.com", password: '123123123')
+admin.add_role :super_admin
+
+puts "Super admin created successfully."

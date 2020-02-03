@@ -31,6 +31,8 @@ gem 'high_voltage'
 gem 'jquery-rails'
 gem 'pg'
 gem 'mini_racer', :platform=>:ruby
+gem 'rolify'
+gem 'jwt'
 group :development do
   gem 'better_errors'
   gem 'hub', :require=>nil
