@@ -1,6 +1,7 @@
+require 'twilio-ruby'
 class Api::V1::UsersController < Api::V1::ApiController
   include Api::V1::UsersHelper
-  skip_before_action :authenticate_via_token, only: [:signin, :signup, :forgotpassword]
+  skip_before_action :authenticate_via_token, only: [:signin, :signup, :forgotpassword, :verify]
 
   #####################################################################
   ## Function:    signin
@@ -46,7 +47,10 @@ class Api::V1::UsersController < Api::V1::ApiController
     email           = params[:user][:email]
     password        = params[:user][:password]
     role            = params[:user][:role]
-    @user           = User.new(email: email, password: password)
+    otp_code        = rand(0000..9999)
+    @user           = User.new(email: email, password: password, verification_code: otp_code)
+
+    @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_KEY'])
 
     if email.blank?
       return render json: { success: false, msg: 'Email address is required.' }, status: 200
@@ -58,10 +62,15 @@ class Api::V1::UsersController < Api::V1::ApiController
       else
         @user.add_role :service_provider
       end
+      @client.messages.create(
+          from: ENV['TWILIO_PHONE'],
+          to: "#{params[:user][:country] + params[:user][:mobile]}",
+          body: "Security Code for Work Grab: #{otp_code}"
+        )
       @user.update_attributes(profile_params)
       UserMailer.new_signup(@user).deliver_now
 
-      return render json: {success: true, msg: 'User created successfully.', data: { id: @user.id, email: email}}, status: 200
+      return render json: {success: true, msg: 'User created successfully.', data: @user}, status: 200
     else
       return render json: { success: false, msg: 'Sorry! the email address already exists.' }, status: 200
     end
@@ -151,6 +160,21 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   end
 
+  def verify
+    code = params[:code]
+    email = params[:email]
+
+    @user = User.find_by(email: email)
+
+    if @user.verification_code == code
+      @user.verification_code = ''
+      @user.otp_verified = true
+      return render json: { success: true, msg: 'Your phone has been verified now.' }, status: 200
+    else
+      return render json: { success: false, msg: 'Wrong security Code...' }, status: 401
+    end
+  end
+
   def signout
     @user.update_logout_details()
 
@@ -159,6 +183,7 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   private
     def profile_params
-      params.fetch(:user, {}).permit(:first_name, :last_name, :email, :password, :profile_url, :country, :mobile, :location, :language, :currency, :role)
+      params.fetch(:user, {}).permit(:first_name, :last_name, :email, :password, :profile_url,
+          :country, :mobile, :location, :language, :currency, :role)
     end
 end
