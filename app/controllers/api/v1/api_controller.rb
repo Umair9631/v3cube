@@ -10,9 +10,9 @@ class Api::V1::ApiController < ApplicationController
       end
 
       @token = request.headers[:Authorization]
-
+      hmac_secret = "85d5a031571d83e028e8b62c670e21837e72e84597ced309d9a898e2d22e0195111c85204e2edbad92633446e214760d216ad44805a1a07938f563280c710600"
       begin
-        @decoded_token = JWT.decode @token, Settings.hmac_secret, true, { algorithm: 'HS256' }
+        @decoded_token = JWT.decode @token, hmac_secret, true, { algorithm: 'HS256' }
         @user = User.find_by(id: @decoded_token.first["data"]["user"]["id"])
 
         if !@user

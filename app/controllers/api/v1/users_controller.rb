@@ -30,7 +30,7 @@ class Api::V1::UsersController < Api::V1::ApiController
       token = get_jwt_token(@user)
 
       ## Update user with token
-      @user.update_attribute(:jwt_token, token)
+      @user.update_attributes(jwt_token: token, status: true)
 
       return render json: { success: true, msg: 'User assigned authentication token.', data: {user: @user}} , status: 200
     else
@@ -47,7 +47,7 @@ class Api::V1::UsersController < Api::V1::ApiController
     email           = params[:user][:email]
     password        = params[:user][:password]
     role            = params[:user][:role]
-    otp_code        = rand(0000..9999)
+    otp_code        = rand(1000..9999)
     @user           = User.new(email: email, password: password, verification_code: otp_code)
 
     @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_KEY'])
@@ -183,7 +183,7 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   private
     def profile_params
-      params.fetch(:user, {}).permit(:first_name, :last_name, :email, :password, :profile_url,
+      params.fetch(:user, {}).permit(:first_name, :last_name, :username, :email, :password, :profile_url,
           :country, :mobile, :location, :language, :currency, :role)
     end
 end

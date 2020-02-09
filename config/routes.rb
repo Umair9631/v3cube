@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :skills
   root to: 'visitors#index'
   devise_for :users
   resources :users
@@ -17,6 +18,13 @@ Rails.application.routes.draw do
           post :signout
         end
       end
+
+      resources :profile, only: :none do
+        collection do
+          put :update_profile
+        end
+      end
+
     end
   end
 
