@@ -156,6 +156,8 @@ GEM
     public_suffix (4.0.3)
     puma (3.12.2)
     rack (2.1.2)
+    rack-cors (1.1.1)
+      rack (>= 2.0.0)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.2.4.1)
@@ -288,6 +290,7 @@ DEPENDENCIES
   pry-rails
   pry-rescue
   puma (~> 3.11)
+  rack-cors
   rails (~> 5.2.4, >= 5.2.4.1)
   rails_layout
   rolify
