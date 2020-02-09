@@ -34,6 +34,7 @@ gem 'jquery-rails'
 gem 'pg'
 gem 'mini_racer', :platform=>:ruby
 gem 'rolify'
+gem 'rack-cors'
 gem 'jwt'
 group :development do
   gem 'better_errors'
