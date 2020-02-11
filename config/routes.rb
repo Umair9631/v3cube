@@ -19,11 +19,13 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :profile, only: :none do
+      resources :profile, only: [:index] do
         collection do
           put :update_profile
         end
       end
+
+      resources :skills, only: [:index]
 
     end
   end

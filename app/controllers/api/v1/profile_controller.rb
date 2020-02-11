@@ -4,7 +4,10 @@ class Api::V1::ProfileController < Api::V1::ApiController
   def update_profile
     @user.update_attributes(profile_params)
     return render json: {success: true, msg: 'user profile updated..!!'}, status: 200
+  end
 
+  def index
+    
   end
 
   private
