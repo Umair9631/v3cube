@@ -9,8 +9,7 @@ class User < ApplicationRecord
 
    def update_logout_details
     self.update_attributes(
-      last_login: Time.now,
-      jwt_token: nil,
+      jwt_token: nil
     )
   end
 

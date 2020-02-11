@@ -50,7 +50,7 @@ class Api::V1::UsersController < Api::V1::ApiController
     otp_code        = rand(1000..9999)
     @user           = User.new(email: email, password: password, verification_code: otp_code)
 
-    @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_KEY'])
+    # @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_KEY'])
 
     if email.blank?
       return render json: { success: false, msg: 'Email address is required.' }, status: 200
@@ -62,11 +62,11 @@ class Api::V1::UsersController < Api::V1::ApiController
       else
         @user.add_role :service_provider
       end
-      @client.messages.create(
-          from: ENV['TWILIO_PHONE'],
-          to: "#{params[:user][:country] + params[:user][:mobile]}",
-          body: "Security Code for Work Grab: #{otp_code}"
-        )
+      # @client.messages.create(
+      #     from: ENV['TWILIO_PHONE'],
+      #     to: "#{params[:user][:country] + params[:user][:mobile]}",
+      #     body: "Security Code for Work Grab: #{otp_code}"
+      #   )
       @user.update_attributes(profile_params)
       UserMailer.new_signup(@user).deliver_now
 

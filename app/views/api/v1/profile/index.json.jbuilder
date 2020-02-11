@@ -1,0 +1,13 @@
+json.profile_url          @user.profile_url
+json.username             @user.username
+json.email                @user.email
+json.first_name           @user.first_name
+json.last_name            @user.last_name
+json.country              @user.country
+json.mobile               @user.mobile
+json.location             @user.location
+json.language             @user.language
+json.currency             @user.currency
+json.otp_verified         @user.otp_verified
+json.service_description  @suer.try(:service_description)
+json.status               @user.status
