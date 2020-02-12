@@ -25,7 +25,8 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :skills, only: [:index]
+      resources :skills, only: [:index, :show] do
+      end
 
     end
   end
