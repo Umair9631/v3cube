@@ -1,0 +1,19 @@
+<p id="notice" > <%= notice %></p>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Parent ID</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><%= @skill.id%></td>
+          <td><%= @skill.name%></td>
+          <td><%= @skill.parent_id%></td>
+        </tr>
+    </tbody>
+  </table>
+<%= link_to 'Edit', edit_skill_path(@skill) %> |
+<%= link_to 'Back', skills_path %>

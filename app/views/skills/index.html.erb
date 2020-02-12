@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Skills</h1>
+
+<table class="table table-striped table-bordered">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Parent ID</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @skills.each do |skill| %>
+      <tr>
+        <td scope="row"><%= skill.id%></td>
+        <td scope="row"><%= skill.name%></td>
+        <td scope="row"><%= skill.parent_id%></td>
+        <td scope="row"><%= link_to 'Show', skill %> |
+        <%= link_to 'Edit', edit_skill_path(skill) %> |
+        <%= link_to 'Destroy', skill, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Skill', new_skill_path %>
