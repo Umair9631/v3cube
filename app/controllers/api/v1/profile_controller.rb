@@ -15,7 +15,7 @@ class Api::V1::ProfileController < Api::V1::ApiController
 
   private
     def profile_params
-      params.fetch(:user, {}).permit(:first_name, :last_name, :profile_url,
+      params.permit(:first_name, :last_name, :email, :profile_url,
           :country, :mobile, :location, :language, :currency, :service_description)
     end
 end
