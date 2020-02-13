@@ -4,7 +4,7 @@ class SkillsController < ApplicationController
   # GET /skills
   # GET /skills.json
   def index
-    @skills = Skill.all
+    @skills = Skill.all.order(parent_id: :asc, id: :asc)
   end
 
   # GET /skills/1
@@ -43,6 +43,7 @@ class SkillsController < ApplicationController
   def update
     respond_to do |format|
       if @skill.update(skill_params)
+        @skill.update_attribute(:parent_id, 0) if @skill.parent_id.nil?
         format.html { redirect_to @skill, notice: 'Skill was successfully updated.' }
         format.json { render :show, status: :ok, location: @skill }
       else
@@ -70,6 +71,6 @@ class SkillsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def skill_params
-      params.require(:skill).permit(:name, :parent_id)
+      params.require(:skill).permit(:skill_icon, :name, :parent_id)
     end
 end

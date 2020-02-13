@@ -31,8 +31,6 @@ class Api::V1::UsersController < Api::V1::ApiController
 
       ## Update user with token
       @user.update_attributes(jwt_token: token, status: true)
-
-      return render json: { success: true, msg: 'User assigned authentication token.', data: @user} , status: 200
     else
       return render json: { success: false, msg: 'Invalid email / password.' }, status: 200
     end
@@ -44,9 +42,9 @@ class Api::V1::UsersController < Api::V1::ApiController
   ## Params:      @email
   #####################################################################
   def signup
-    email           = params[:user][:email]
-    password        = params[:user][:password]
-    role            = params[:user][:role]
+    email           = params[:email]
+    password        = params[:password]
+    role            = params[:role].to_i
     otp_code        = rand(1000..9999)
     @user           = User.new(email: email, password: password, verification_code: otp_code)
 
@@ -55,7 +53,7 @@ class Api::V1::UsersController < Api::V1::ApiController
     if email.blank?
       return render json: { success: false, msg: 'Email address is required.' }, status: 200
     end
-
+    #
     if @user.save
       if role == 1
         @user.add_role :service_user
@@ -70,7 +68,6 @@ class Api::V1::UsersController < Api::V1::ApiController
       @user.update_attributes(profile_params)
       UserMailer.new_signup(@user).deliver_now
 
-      return render json: {success: true, msg: 'User created successfully.', data: @user}, status: 200
     else
       return render json: { success: false, msg: 'Sorry! the email address already exists.' }, status: 200
     end
@@ -78,7 +75,7 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   def upload_picture
     @user.update_attribute(:profile_url, params[:profile_url])
-    return render json: {success: true, msg: 'User created successfully.', data: @user.profile_url}, status: 200
+    return render json: {success: true, msg: 'User profile picture updated successfully.', data: @user.profile_url}, status: 200
   end
   #####################################################################
   ## Function:    forgotpassword
@@ -187,7 +184,6 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   private
     def profile_params
-      params.fetch(:user, {}).permit(:first_name, :last_name, :username, :email, :password, :profile_url,
-          :country, :mobile, :location, :language, :currency, :role)
+      params.permit(:username, :email, :password, :mobile, :location, :language, :currency, :role, :profile_url)
     end
 end

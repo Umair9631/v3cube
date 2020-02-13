@@ -1,4 +1,6 @@
 class Skill < ApplicationRecord
+
+  mount_uploader :skill_icon, PictureUploader
   ## Associations
   # has_many :users, through: :user_skills
   # has_many :user_skills
