@@ -1,7 +1,7 @@
 require 'twilio-ruby'
 class Api::V1::UsersController < Api::V1::ApiController
   include Api::V1::UsersHelper
-  skip_before_action :authenticate_via_token, only: [:signin, :signup, :forgotpassword, :verify]
+  skip_before_action :authenticate_via_token, only: [:signin, :signup, :forgotpassword]
 
   #####################################################################
   ## Function:    signin
@@ -32,7 +32,7 @@ class Api::V1::UsersController < Api::V1::ApiController
       ## Update user with token
       @user.update_attributes(jwt_token: token, status: true)
 
-      return render json: { success: true, msg: 'User assigned authentication token.', data: {user: @user}} , status: 200
+      return render json: { success: true, msg: 'User assigned authentication token.', data: @user} , status: 200
     else
       return render json: { success: false, msg: 'Invalid email / password.' }, status: 200
     end
@@ -76,6 +76,10 @@ class Api::V1::UsersController < Api::V1::ApiController
     end
   end
 
+  def upload_picture
+    @user.update_attribute(:profile_url, params[:profile_url])
+    return render json: {success: true, msg: 'User created successfully.', data: @user.profile_url}, status: 200
+  end
   #####################################################################
   ## Function:    forgotpassword
   ## Endpoint:    [POST]/users/forgotpassword

@@ -28,6 +28,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'bootstrap', '~> 4.3.1'
 gem 'devise'
 gem 'high_voltage'
+gem 'carrierwave'
 gem 'figaro'
 gem 'twilio-ruby', '~> 5.31.4'
 gem 'jquery-rails'

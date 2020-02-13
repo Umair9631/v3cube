@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   rolify
 
+  mount_uploader :profile_url, PictureUploader
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

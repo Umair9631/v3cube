@@ -9,6 +9,10 @@ class Api::V1::ProfileController < Api::V1::ApiController
   def index
   end
 
+  def profile
+    return render json: {success: true, data: @user}, status: 200
+  end
+
   private
     def profile_params
       params.fetch(:user, {}).permit(:first_name, :last_name, :profile_url,

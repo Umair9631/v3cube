@@ -12,6 +12,7 @@ Rails.application.routes.draw do
           post :signup
           post :signin
           post :verify
+          post :upload_picture
           post :resetpassword
           post :forgotpassword
           post :update_password
