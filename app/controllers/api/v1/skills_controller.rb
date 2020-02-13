@@ -7,6 +7,7 @@ class Api::V1::SkillsController < Api::V1::ApiController
 
     def show
       @skills =  Skill.select { |s| s.parent_id == params[:id].to_i  }
+      return render json: {success: true, msg: 'skills category', data: @skills}, status: 200
     end
 
 end

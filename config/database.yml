@@ -14,14 +14,12 @@
 #
 development:
   adapter:  postgresql
-  host:     ec2-54-246-90-10.eu-west-1.compute.amazonaws.com
+  host:     localhost
   encoding: unicode
-  database: d32hc26qvl3dqb
+  database: v3cube_development
   pool:     5
-  username: axyggpyuyhtjli
-  port: 5432
-  uri: postgres://axyggpyuyhtjli:0f8a7c66eeff79bd69d109ef0e0dc7e8aad6d43b445b7415e9d2816053cfa824@ec2-54-246-90-10.eu-west-1.compute.amazonaws.com:5432/d32hc26qvl3dqb
-  password: 0f8a7c66eeff79bd69d109ef0e0dc7e8aad6d43b445b7415e9d2816053cfa824
+  username: postgres
+  password: root
   template: template0
 
   # Connect on a TCP socket. Omitted by default since the client uses a
